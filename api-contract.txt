@@ -1,0 +1,19 @@
+Api Endpoints
+
+Authentication - Logging in and out
+postLogin, postLogout
+
+Creating an account
+postCreate, reset password Endpoints
+
+info for home screen
+get
+
+info for individual pages
+get
+
+add, edit, delete pages
+post, put, delete
+
+add, edit, or delete content template
+post, put, delete
