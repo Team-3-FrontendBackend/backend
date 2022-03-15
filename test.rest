@@ -1,0 +1,8 @@
+POST http://localhost:3000/signup
+Content-Type: application/x-www-form-urlencoded
+
+username=Bob
+&password=123456
+&confirmPassword=123456
+&url=/test
+&siteName=Test Site
