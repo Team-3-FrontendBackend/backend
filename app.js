@@ -7,11 +7,15 @@ require('dotenv').config();
 const app = express();
 const port = 3000;
 
+const authRoutes = require('./routes/auth');
+
 const mongoDbUrl = process.env.MONGODB_URL;
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
+
+app.use(authRoutes);
 
 mongoose
   .connect(mongoDbUrl)
