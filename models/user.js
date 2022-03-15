@@ -21,7 +21,6 @@ const userSchema = new Schema({
   globalData: {
     ref: 'GlobalData',
     type: Schema.Types.ObjectId,
-    required: true,
   },
 });
 

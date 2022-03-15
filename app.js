@@ -1,29 +1,29 @@
 // import necessary libraries
-const express = require("express");
-const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
-const session = require("express-session");
-const MongoDBStore = require("connect-mongodb-session")(session);
-const csrf = require("csurf");
-require("dotenv").config();
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
+const csrf = require('csurf');
+require('dotenv').config();
 
 const port = 3000;
 const mongoDbUrl = process.env.MONGODB_URL;
 
-const User = require("./models/user");
+const User = require('./models/user');
 
 const app = express();
 const store = new MongoDBStore({
   uri: mongoDbUrl,
-  collection: "sessions",
+  collection: 'sessions',
 });
 const csrfProtection = csrf();
 
-const authRoutes = require("./routes/auth");
+const authRoutes = require('./routes/auth');
 
 app.use(
   session({
-    secret: "my secret",
+    secret: 'my secret',
     resave: false,
     saveUninitialized: false,
     store: store,
@@ -56,8 +56,8 @@ app.use((req, res, next) => {
 
 app.use(authRoutes);
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
+app.get('/', (req, res) => {
+  res.send('Hello World!');
 });
 
 app.use(authRoutes);
