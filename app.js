@@ -12,6 +12,8 @@ const User = require('./models/user');
 const app = express();
 
 const authRoutes = require('./routes/auth');
+const adminRoutes = require('./routes/admin');
+const liveRoutes = require('./routes/live');
 
 app.use(bodyParser.json()); // application/json
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -27,6 +29,8 @@ app.use((req, res, next) => {
 });
 
 app.use(authRoutes);
+app.use(adminRoutes);
+app.use(liveRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
