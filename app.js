@@ -14,6 +14,7 @@ const app = express();
 const authRoutes = require('./routes/auth');
 
 app.use(bodyParser.json()); // application/json
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
