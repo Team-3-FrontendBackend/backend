@@ -10,8 +10,12 @@ exports.getNav = (req,res,next) => {
 }
 
 exports.addNav = (req, res, next) => {
-    const links = req.body.nav.links;
+    const errors = validationResult(req);
     
+    const links = req.body.nav.links;
+     if(!errors.isEmpty()) {
+         console.log(errors.array());
+     }
 }
 
 exports.updateNav = (req, res, next) => {
