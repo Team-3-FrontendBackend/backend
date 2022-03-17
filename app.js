@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 const mongoDbUrl = process.env.MONGODB_URL;
 
 const User = require('./models/user');
