@@ -12,11 +12,12 @@ const User = require('./models/user');
 const app = express();
 
 const authRoutes = require('./routes/auth');
-// const adminRoutes = require('./routes/admin');
+const adminRoutes = require('./routes/admin');
+const isAuth = require('./middleware/is-auth');
 // const liveRoutes = require('./routes/live');
 
 app.use(bodyParser.json()); // application/json
-app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -29,14 +30,20 @@ app.use((req, res, next) => {
 });
 
 app.use(authRoutes);
-// app.use(adminRoutes);
+app.use('/admin', adminRoutes);
 // app.use(liveRoutes);
+
+app.use((error, req, res, next) => {
+  console.log(error);
+  const status = error.statusCode || 500;
+  const message = error.message;
+  const data = error.data;
+  res.status(status).json({ message: message, data: data });
+});
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
-
-app.use(authRoutes);
 
 mongoose
   .connect(mongoDbUrl)

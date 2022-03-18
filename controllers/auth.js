@@ -6,14 +6,6 @@ require('dotenv').config();
 const User = require('../models/user');
 const GlobalData = require('../models/globalData');
 
-// exports.getLogin = (req, res, next) => {
-//   res.status(200).json({ message: 'login success' });
-// };
-
-// exports.getSignup = (req, res, next) => {
-//   res.status(200).json({ message: 'signup success' });
-// };
-
 exports.postLogin = (req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
@@ -45,7 +37,11 @@ exports.postLogin = (req, res, next) => {
       res.status(201).json({ token: token, userId: loadedUser._id.toString() });
     })
     .catch((err) => {
-      console.log(err);
+      // check for errors
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
     });
 };
 
@@ -58,7 +54,9 @@ exports.postSignup = (req, res, next) => {
   const siteName = req.body.siteName;
 
   if (password !== confirmPassword) {
-    return res.status(401).json({ message: 'passwords do not match' });
+    const error = new Error('Passwords do not match!');
+    error.statusCode = 401;
+    throw error;
   }
 
   bcrypt
@@ -77,8 +75,9 @@ exports.postSignup = (req, res, next) => {
     })
     .then((user) => {
       if (!user) {
-        console.log('No user found');
-        return;
+        const error = new Error('Network error');
+        error.statusCode = 500;
+        throw error;
       }
       const globalData = new GlobalData({
         userId: user._id,
@@ -104,6 +103,10 @@ exports.postSignup = (req, res, next) => {
       res.status(201).json({ message: 'User created successfully' });
     })
     .catch((err) => {
-      console.log(err);
+      // check for errors
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
     });
 };
