@@ -4,13 +4,13 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 
-exports.getLogin = (req, res, next) => {
-  res.status(200).json({ message: 'login success' });
-};
+// exports.getLogin = (req, res, next) => {
+//   res.status(200).json({ message: 'login success' });
+// };
 
-exports.getSignup = (req, res, next) => {
-  res.status(200).json({ message: 'signup success' });
-};
+// exports.getSignup = (req, res, next) => {
+//   res.status(200).json({ message: 'signup success' });
+// };
 
 exports.postLogin = (req, res, next) => {
   const username = req.body.username;
@@ -20,7 +20,7 @@ exports.postLogin = (req, res, next) => {
     .then((user) => {
       if (!user) {
         const error = new Error('A user with this name could not be found.');
-        error.statusCode = 401;
+        error.statusCode = 404;
         throw error;
       }
       loadedUser = user;
@@ -29,7 +29,7 @@ exports.postLogin = (req, res, next) => {
     .then((isEqual) => {
       if (!isEqual) {
         const error = new Error('Wrong password!');
-        error.statusCode = 401;
+        error.statusCode = 403;
         throw error;
       }
       const token = jwt.sign(
