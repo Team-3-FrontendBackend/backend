@@ -1,8 +1,10 @@
 const bcrypt = require('bcryptjs');
-const { validationResult } = require('express-validator/check');
+const { validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const User = require('../models/user');
+const GlobalData = require('../models/globalData');
 
 // exports.getLogin = (req, res, next) => {
 //   res.status(200).json({ message: 'login success' });
@@ -37,21 +39,18 @@ exports.postLogin = (req, res, next) => {
           username: loadedUser.username,
           userId: loadedUser._id.toString(),
         },
-        'somesupersecretsecret',
+        process.env.JWT_SECRET,
         { expiresIn: '1h' }
       );
-      res.status(200).json({ token: token, userId: loadedUser._id.toString() });
+      res.status(201).json({ token: token, userId: loadedUser._id.toString() });
     })
     .catch((err) => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(err);
+      console.log(err);
     });
 };
 
 exports.postSignup = (req, res, next) => {
-  console.log(req.body.username);
+  // sign up controller
   const username = req.body.username;
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
@@ -59,7 +58,7 @@ exports.postSignup = (req, res, next) => {
   const siteName = req.body.siteName;
 
   if (password !== confirmPassword) {
-    return res.status(403).json({ message: 'passwords do not match' });
+    return res.status(401).json({ message: 'passwords do not match' });
   }
 
   bcrypt
@@ -74,6 +73,37 @@ exports.postSignup = (req, res, next) => {
       return newUser.save();
     })
     .then((result) => {
+      return User.findOne({ username: username });
+    })
+    .then((user) => {
+      if (!user) {
+        console.log('No user found');
+        return;
+      }
+      const globalData = new GlobalData({
+        userId: user._id,
+        header: {
+          logoUrl: '',
+          backgroundColor: '',
+        },
+        nav: {
+          links: [''],
+        },
+        footer: {
+          contact: '',
+          socialLinks: {
+            facebook: '',
+            iBelong: '',
+            instagram: '',
+          },
+        },
+      });
+      return globalData.save();
+    })
+    .then((result) => {
       res.status(201).json({ message: 'User created successfully' });
+    })
+    .catch((err) => {
+      console.log(err);
     });
 };
