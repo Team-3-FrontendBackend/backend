@@ -18,10 +18,6 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  globalData: {
-    ref: 'GlobalData',
-    type: Schema.Types.ObjectId,
-  },
 });
 
 module.exports = mongoose.model('User', userSchema);
