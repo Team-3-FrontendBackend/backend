@@ -1,6 +1,7 @@
 const express = require('express');
 
 const adminController = require('../controllers/admin');
+const isAuth = require("../middleware/is-auth");
 
 const router = express.Router();
 
@@ -48,5 +49,7 @@ const router = express.Router();
 // router.put('/footer', adminController.updateFooter);
 
 // router.delete('/footer', adminController.deleteFooter);
+
+router.get('/', isAuth, adminController.getGlobalData);
 
 module.exports = router;

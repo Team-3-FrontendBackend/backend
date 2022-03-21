@@ -64,6 +64,7 @@ exports.deleteHeader = (req, res, next) => {
 exports.getGlobalData = (req, res, next) => {
 
     const errors = validationResult(req);
+    
     Admin.findById(req.userId).then(data => {
         // output data
         console.log(data);
