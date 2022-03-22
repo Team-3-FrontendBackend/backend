@@ -45,13 +45,16 @@ exports.getGlobalData = (req, res, next) => {
     });
 };
 
-exports.postGlobalData = (req, res, next) => {
+exports.putGlobalData = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed, entered data is incorrect.');
     error.statusCode = 422;
     throw error;
   }
+
+  console.log('made it here', req.body);
+  return;
 
   const headerLogoUrl = req.body.header.logoUrl;
   const headerBackgroundColor = req.body.header.backgroundColor;
