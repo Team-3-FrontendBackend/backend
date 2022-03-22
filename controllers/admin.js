@@ -8,30 +8,41 @@ const GlobalData = require('../models/globalData');
 exports.getGlobalData = (req, res, next) => {
   const errors = validationResult(req);
 
-  GlobalData.findById(req.userId).then((data) => {
-    // output data
-    console.log(data);
+  GlobalData.findOne({ userId: req.userId })
+    .then((data) => {
+      // output data
+      if (!data) {
+        const error = new Error('No data found');
+        error.statusCode = 404;
+        throw error;
+      }
 
-    // retrieve data from header
-    const headerLogoUrl = data.header.logoUrl;
-    const headerBackgroundColor = data.header.backgroundColor;
+      // retrieve data from header
+      const headerLogoUrl = data.header.logoUrl;
+      const headerBackgroundColor = data.header.backgroundColor;
 
-    // retrieve data from nav
-    const navLinks = data.nav.links;
+      // retrieve data from nav
+      const navLinks = data.nav.links;
 
-    // retrieve data from footer
-    const footerContact = data.footer.contact;
-    const footerSocials = data.footer.socialLinks;
+      // retrieve data from footer
+      const footerContact = data.footer.contact;
+      const footerSocials = data.footer.socialLinks;
 
-    // return data as a json
-    res.status(200).json({
-      headerLogoUrl: headerLogoUrl,
-      headerBackgroundColor: headerBackgroundColor,
-      navLinks: navLinks,
-      footerContact: footerContact,
-      footerSocials: footerSocials,
+      // return data as a json
+      res.status(200).json({
+        headerLogoUrl: headerLogoUrl,
+        headerBackgroundColor: headerBackgroundColor,
+        navLinks: navLinks,
+        footerContact: footerContact,
+        footerSocials: footerSocials,
+      });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
     });
-  });
 };
 
 exports.getData = (req, res, next) => {
@@ -73,6 +84,7 @@ exports.postGlobalData = (req, res, next) => {
   globalData
     .save()
     .then((result) => {
+      // TODO: this needs to be updated to fineOne({userId:req.userId})
       return GlobalData.findById(req.userId);
     })
     .then((user) => {
