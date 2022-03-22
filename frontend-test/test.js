@@ -1,5 +1,5 @@
 let jwt;
-const url1 = 'http://localhost:3000/admin/test';
+
 const url4 = 'http://localhost:3000/admin/global-data';
 const putGlobalDataUrl = 'http://localhost:3000/admin/global-data';
 const url2 = 'http://localhost:3000/login';
