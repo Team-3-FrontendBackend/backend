@@ -1,93 +1,95 @@
 const mongoose = require('mongoose');
 
-const { validationResult } = require('express-validator/check');
+const { validationResult } = require('express-validator');
 
-const Admin = require('../models/globalData');
-
-//nav bar
-exports.getNav = (req,res,next) => {
-    res.status(200).json({ message: 'Get Navbar successfully' });
-}
-
-exports.addNav = (req, res, next) => {
-    const errors = validationResult(req);
-    
-    const links = req.body.nav.links;
-     if(!errors.isEmpty()) {
-         console.log(errors.array());
-     }
-}
-
-exports.updateNav = (req, res, next) => {
-
-}
-
-exports.deleteNav = (req, res, next) => {
-
-}
-
-//header 
-
-exports.getHeader = (req, res, next) => {
-}
-
-exports.addHeader = (req, res, next) => {
-    
-}
-
-exports.updateHeader = (req, res, next) => {
-
-}
-
-exports.deleteHeader = (req, res,next) => {
-
-}
-
-//footer
-exports.getFooter = (req, res, next) => {
-
-}
-
-exports.addFooter = (req, res, next) => {
-
-}
-
-exports.updateFooter = (req, res, next) => {
-
-}
-
-exports.deleteHeader = (req, res, next) => {
-
-}
+const GlobalData = require('../models/globalData');
 
 // globalData
 exports.getGlobalData = (req, res, next) => {
+  const errors = validationResult(req);
 
-    const errors = validationResult(req);
-    
-    Admin.findById(req.userId).then(data => {
-        // output data
-        console.log(data);
+  GlobalData.findById(req.userId).then((data) => {
+    // output data
+    console.log(data);
 
-        // retrieve data from header
-        const headerLogoUrl = data.header.logoUrl;
-        const headerBackgroundColor = data.header.backgroundColor;
+    // retrieve data from header
+    const headerLogoUrl = data.header.logoUrl;
+    const headerBackgroundColor = data.header.backgroundColor;
 
-        // retrieve data from nav
-        const navLinks = data.nav.links;
+    // retrieve data from nav
+    const navLinks = data.nav.links;
 
-        // retrieve data from footer
-        const footerContact = data.footer.contact;
-        const footerSocials = data.footer.socialLinks;
+    // retrieve data from footer
+    const footerContact = data.footer.contact;
+    const footerSocials = data.footer.socialLinks;
 
-        // return data as a json
-        res.status(200).json({
-            headerLogoUrl: headerLogoUrl, 
-            headerBackgroundColor: headerBackgroundColor,
-            navLinks: navLinks,
-            footerContact: footerContact,
-            footerSocials: footerSocials
-        })
+    // return data as a json
+    res.status(200).json({
+      headerLogoUrl: headerLogoUrl,
+      headerBackgroundColor: headerBackgroundColor,
+      navLinks: navLinks,
+      footerContact: footerContact,
+      footerSocials: footerSocials,
     });
-}
+  });
+};
 
+exports.getData = (req, res, next) => {
+  console.log('data');
+  res.status(200).json({ message: 'Data' });
+};
+
+exports.postGlobalData = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed, entered data is incorrect.');
+    error.statusCode = 422;
+    throw error;
+  }
+
+  const headerLogoUrl = req.body.header.logoUrl;
+  const headerBackgroundColor = req.body.header.backgroundColor;
+  const navLinks = req.body.nav.links;
+  const footerContact = req.body.footer.contact;
+  const footerFacebookLink = req.body.footer.socialLinks.facebook;
+  const footerIbelongLink = req.body.footer.socialLinks.iBelong;
+  const footerInstagramLink = req.body.footer.socialLinks.instagram;
+
+  let userId;
+
+  const globalData = new GlobalData({
+    header: { logoUrl: headerLogoUrl, backgroundColor: headerBackgroundColor },
+    nav: { links: navLinks },
+    footer: {
+      contact: footerContact,
+      socialLinks: {
+        facebook: footerFacebookLink,
+        iBelong: footerIbelongLink,
+        instagaram: footerInstagramLink,
+      },
+    },
+    userId: req.userId,
+  });
+  globalData
+    .save()
+    .then((result) => {
+      return GlobalData.findById(req.userId);
+    })
+    .then((user) => {
+      userId = user;
+      user.posts.push(globalData);
+      return user.save();
+    })
+    .then((result) => {
+      res.status(201).json({
+        message: 'Post created successfully!',
+        post: post,
+      });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
