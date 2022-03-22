@@ -3,9 +3,14 @@ const url1 = 'http://localhost:3000/admin/test';
 const url4 = 'http://localhost:3000/admin/global-data';
 const putGlobalDataUrl = 'http://localhost:3000/admin/global-data';
 const url2 = 'http://localhost:3000/login';
-const url3 = 'https://cms-societies.herokuapp.com/login';
 
-fetch(url2, {
+const herokuLogin = 'https://cms-societies.herokuapp.com/login';
+const herokuGetGlobalData =
+  'https://cms-societies.herokuapp.com/admin/global-data';
+const herokuPutGlobalData =
+  'https://cms-societies.herokuapp.com/admin/global-data';
+
+fetch(herokuLogin, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -27,7 +32,7 @@ fetch(url2, {
   .catch((err) => console.log(err));
 
 const requestTwo = () => {
-  fetch(url4, {
+  fetch(herokuGetGlobalData, {
     headers: {
       Authorization: 'Bearer ' + jwt.toString(),
     },
@@ -40,7 +45,7 @@ const requestTwo = () => {
 };
 
 const putGlobalData = () => {
-  fetch(putGlobalDataUrl, {
+  fetch(herokuPutGlobalData, {
     method: 'PUT',
     headers: {
       Authorization: 'Bearer ' + jwt.toString(),
