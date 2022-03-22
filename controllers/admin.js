@@ -45,11 +45,6 @@ exports.getGlobalData = (req, res, next) => {
     });
 };
 
-exports.getData = (req, res, next) => {
-  console.log('data');
-  res.status(200).json({ message: 'Data' });
-};
-
 exports.postGlobalData = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
