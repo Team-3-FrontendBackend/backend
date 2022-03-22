@@ -21,7 +21,7 @@ fetch(url2, {
   .then((result) => {
     jwt = result.token;
     console.log(jwt);
-    // putGlobalData();
+    putGlobalData();
     requestTwo();
   })
   .catch((err) => console.log(err));
@@ -45,6 +45,7 @@ const putGlobalData = () => {
     method: 'PUT',
     headers: {
       Authorization: 'Bearer ' + jwt.toString(),
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       header: {
@@ -64,5 +65,5 @@ const putGlobalData = () => {
         },
       },
     }),
-  });
+  }).then((result) => console.log(result));
 };
