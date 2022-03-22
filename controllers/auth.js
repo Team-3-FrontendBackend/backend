@@ -53,32 +53,50 @@ exports.postSignup = (req, res, next) => {
   const url = req.body.url;
   const siteName = req.body.siteName;
 
-  if (password !== confirmPassword) {
-    const error = new Error('Passwords do not match!');
-    error.statusCode = 401;
-    throw error;
-  }
+  // make sure the user doesn't already exist
+  User.findOne({ username: username })
+    .then((user) => {
+      if (user) {
+        const error = new Error('Username already in use');
+        error.statusCode = 422;
+        throw error;
+      }
+      // we are good to continue
 
-  bcrypt
-    .hash(password, 12)
+      // make sure passwords match
+      if (password !== confirmPassword) {
+        const error = new Error('Passwords do not match!');
+        error.statusCode = 401;
+        throw error;
+      }
+      // we are good to continue
+
+      // encrypt password
+      return bcrypt.hash(password, 12);
+    })
     .then((hashedPassword) => {
+      // create user object
       const newUser = new User({
         username: username,
         password: hashedPassword,
         url: url,
         siteName: siteName,
       });
+      // save the user
       return newUser.save();
     })
     .then((result) => {
+      // get the user so we can create header, nav, and footer info
       return User.findOne({ username: username });
     })
     .then((user) => {
+      // some issue finding the user ...
       if (!user) {
         const error = new Error('Network error');
         error.statusCode = 500;
         throw error;
       }
+      // create GlobalData object
       const globalData = new GlobalData({
         userId: user._id,
         header: {
@@ -97,9 +115,11 @@ exports.postSignup = (req, res, next) => {
           },
         },
       });
+      // save GlobalData object
       return globalData.save();
     })
     .then((result) => {
+      // successfully create a new user and associated data
       res.status(201).json({ message: 'User created successfully' });
     })
     .catch((err) => {
