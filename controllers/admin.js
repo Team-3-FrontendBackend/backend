@@ -79,8 +79,7 @@ exports.postGlobalData = (req, res, next) => {
   globalData
     .save()
     .then((result) => {
-      // TODO: this needs to be updated to fineOne({userId:req.userId})
-      return GlobalData.findById(req.userId);
+      return GlobalData.findOne({ userId: req.userId });
     })
     .then((user) => {
       userId = user;
