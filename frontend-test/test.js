@@ -39,7 +39,6 @@ const requestTwo = () => {
     .catch((err) => console.log(err));
 };
 
-// this section is not working yet.
 const putGlobalData = () => {
   fetch(putGlobalDataUrl, {
     method: 'PUT',
