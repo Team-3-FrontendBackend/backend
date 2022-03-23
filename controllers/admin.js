@@ -71,7 +71,7 @@ exports.putGlobalData = (req, res, next) => {
       return data.save();
     })
     .then((result) => {
-      res.status(201).json({
+      res.status(204).json({
         message: 'Global Data updated successfully!',
       });
     })
