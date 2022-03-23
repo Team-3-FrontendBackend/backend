@@ -9,4 +9,8 @@ router.get('/global-data', isAuth, adminController.getGlobalData);
 
 router.put('/global-data', isAuth, adminController.putGlobalData);
 
+router.post('/:siteName', isAuth, adminController.createHome);
+
+router.get('/:siteName', isAuth, adminController.getHome);
+
 module.exports = router;

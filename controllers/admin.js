@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const { validationResult } = require('express-validator');
 
 const GlobalData = require('../models/globalData');
+const Page = require('../models/page');
 
 // globalData
 exports.getGlobalData = (req, res, next) => {
@@ -74,6 +75,66 @@ exports.putGlobalData = (req, res, next) => {
       res.status(204).json({
         message: 'Global Data updated successfully!',
       });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
+exports.createHome = (req, res, next) => {
+  // get important data
+  const url = req.params.siteName;
+  const name = req.body.name;
+
+  Page.findOne({ url: url, userId: req.userId })
+    .then((page) => {
+      // if the home page already exists, respond with error.
+      if (page) {
+        const error = new Error('Home page already exists');
+        error.statusCode = 405;
+        throw error;
+      }
+      // home page doesn't exist
+
+      // create a Page object
+      const homePage = new Page({
+        url: url,
+        contentTemplates: [],
+        name: name,
+        userId: mongoose.Types.ObjectId(req.userId),
+      });
+      // save the page object
+      return homePage.save();
+    })
+    .then((result) => {
+      // send a response
+      res.status(201).json({ message: 'Home page created successfully' });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
+exports.getHome = (req, res, next) => {
+  // get necessary data
+  const url = req.params.siteName;
+
+  Page.findOne({ url: url, userId: req.userId })
+    .then((page) => {
+      // if no page is found
+      if (!page) {
+        const error = new Error('No page found');
+        error.statusCode = 404;
+        throw error;
+      }
+      // if a home page is found
+      res.status(200).json({ message: 'Home page found', page: page });
     })
     .catch((err) => {
       if (!err.statusCode) {
