@@ -143,3 +143,36 @@ exports.getHome = (req, res, next) => {
       next(err);
     });
 };
+
+exports.updateHome = (req, res, next) => {
+  // content being received
+  const url = req.params.siteName;
+  const contentTemplates = req.body.contentTemplates;
+  const name = req.body.name;
+
+  // find the home page
+  Page.findOne({ url: url, userId: req.userId })
+    .then((page) => {
+      // check to make sure we got a page
+      if (!page) {
+        const error = new Error('No page found');
+        error.statusCode = 404;
+        throw error;
+      }
+      // if we found a page update the content
+      page.contentTemplates = contentTemplates;
+      page.name = name;
+
+      // save the page object
+      return page.save();
+    })
+    .then((result) => {
+      res.status(204).json({ message: 'Page updated successfully' });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};

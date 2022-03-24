@@ -5,6 +5,7 @@ const url4 = 'http://localhost:3000/admin/global-data';
 const putGlobalDataUrl = 'http://localhost:3000/admin/global-data';
 const url2 = 'http://localhost:3000/login';
 const adminHomeUrl = 'http://localhost:3000/admin/joes-site';
+const putHomePage = 'http://localhost:3000/admin/joes-site';
 
 const herokuSignUp = 'https://cms-societies.herokuapp.com/signup';
 const herokuLogin = 'https://cms-societies.herokuapp.com/login';
@@ -49,9 +50,11 @@ fetch(herokuLogin, {
   .then((result) => {
     jwt = result.token;
     console.log(jwt);
-    putGlobalData();
-    getGlobalData();
+    // putGlobalData();
+    // getGlobalData();
     // createHome();
+    // getHome();
+    updateHome();
     getHome();
   })
   .catch((err) => console.log(err));
@@ -118,6 +121,25 @@ const getHome = () => {
     headers: {
       Authorization: 'Bearer ' + jwt.toString(),
     },
+  })
+    .then((result) => result.json())
+    .then((result) => console.log(result));
+};
+
+const updateHome = () => {
+  fetch(putHomePage, {
+    method: 'PUT',
+    headers: {
+      Authorization: 'Bearer ' + jwt.toString(),
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      contentTemplates: [
+        'This is some content here',
+        'Here is some more content',
+      ],
+      name: 'Joes Home Page',
+    }),
   })
     .then((result) => result.json())
     .then((result) => console.log(result));

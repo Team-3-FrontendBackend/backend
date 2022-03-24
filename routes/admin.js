@@ -13,4 +13,6 @@ router.post('/:siteName', isAuth, adminController.createHome);
 
 router.get('/:siteName', isAuth, adminController.getHome);
 
+router.put('/:siteName', isAuth, adminController.updateHome);
+
 module.exports = router;
