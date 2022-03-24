@@ -6,9 +6,9 @@ const user = require("../models/user");
 exports.getHomePage = (req, res, next) => {
   const siteName = req.params.siteName;
 
-  // TODO: get home page by filtering by siteName
   User.findOne({ siteName: siteName }).then((user) => {
     GlobalData.findOne({ userId: user._id }).then((data) => {
+      
       // retrieve data from header
       const headerLogoUrl = data.header.logoUrl;
       const headerBackgroundColor = data.header.backgroundColor;
@@ -20,22 +20,30 @@ exports.getHomePage = (req, res, next) => {
       const footerContact = data.footer.contact;
       const footerSocials = data.footer.socialLinks;
 
-      Page.findOne({url: siteName, userId: user._id}).then(page => {
+      Page.findOne({ url: siteName, userId: user._id }).then((page) => {
         // error handling when no page is found
         if (!page) {
-          const error = new Error('No page found');
+          const error = new Error("No page found");
           error.statusCode = 404;
           throw error;
         }
-      })
 
-      // return data as a json
-      res.status(200).json({
-        headerLogoUrl: headerLogoUrl,
-        headerBackgroundColor: headerBackgroundColor,
-        navLinks: navLinks,
-        footerContact: footerContact,
-        footerSocials: footerSocials,
+        // retrieve content in home page
+        const content = page.contentTemplates;
+
+        // retrieve the name of the page
+        const name = page.name;
+
+        // return data as a json
+        res.status(200).json({
+          headerLogoUrl: headerLogoUrl,
+          headerBackgroundColor: headerBackgroundColor,
+          navLinks: navLinks,
+          footerContact: footerContact,
+          footerSocials: footerSocials,
+          content: content,
+          name: name,
+        });
       });
     });
   });
@@ -46,9 +54,7 @@ exports.getSiteNamePage = (req, res, next) => {
   const pageName = req.params.pageName;
 
   // TODO: retrieve page of a user
-  User.findOne({ userId: user._id }).then((data) => {
-
-  });
+  User.findOne({ userId: user._id }).then((data) => {});
 };
 
 // const mongoose = require('mongoose');
