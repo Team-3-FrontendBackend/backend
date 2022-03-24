@@ -144,3 +144,21 @@ const updateHome = () => {
     .then((result) => result.json())
     .then((result) => console.log(result));
 };
+
+const createPage = () => {
+  fetch('', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + jwt.toString(),
+    },
+    body: JSON.stringify({
+      name: 'Contact Page',
+      contentTemplates: ['This is some content', 'More content here'],
+    }),
+  });
+};
+
+const getPage = () => {
+  fetch('', {});
+};

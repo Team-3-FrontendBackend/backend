@@ -15,4 +15,8 @@ router.get('/:siteName', isAuth, adminController.getHome);
 
 router.put('/:siteName', isAuth, adminController.updateHome);
 
+router.post('/:siteName/:pageName', isAuth, adminController.createPage);
+
+router.get('/:siteName/:pageName', isAuth, adminController.getPage);
+
 module.exports = router;
