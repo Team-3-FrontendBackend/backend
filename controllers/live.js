@@ -20,6 +20,15 @@ exports.getHomePage = (req, res, next) => {
       const footerContact = data.footer.contact;
       const footerSocials = data.footer.socialLinks;
 
+      Page.findOne({url: siteName, userId: user._id}).then(page => {
+        // error handling when no page is found
+        if (!page) {
+          const error = new Error('No page found');
+          error.statusCode = 404;
+          throw error;
+        }
+      })
+
       // return data as a json
       res.status(200).json({
         headerLogoUrl: headerLogoUrl,
@@ -38,7 +47,7 @@ exports.getSiteNamePage = (req, res, next) => {
 
   // TODO: retrieve page of a user
   User.findOne({ userId: user._id }).then((data) => {
-    
+
   });
 };
 
