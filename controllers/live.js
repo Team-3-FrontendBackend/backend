@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const Page = require("../models/page");
 const GlobalData = require("../models/globalData");
+const user = require("../models/user");
 
 exports.getHomePage = (req, res, next) => {
   const siteName = req.params.siteName;
@@ -34,6 +35,11 @@ exports.getHomePage = (req, res, next) => {
 exports.getSiteNamePage = (req, res, next) => {
   const siteName = req.params.siteName;
   const pageName = req.params.pageName;
+
+  // TODO: retrieve page of a user
+  User.findOne({ userId: user._id }).then((data) => {
+    
+  });
 };
 
 // const mongoose = require('mongoose');
