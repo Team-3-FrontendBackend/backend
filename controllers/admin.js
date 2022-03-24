@@ -157,13 +157,13 @@ exports.createPage = (req, res, next) => {
 
   Page.findOne({ url: url, userId: req.userId })
     .then((page) => {
-      // if the home page already exists, respond with error.
+      // if the page already exists, respond with error.
       if (page) {
         const error = new Error('Page already exists');
         error.statusCode = 405;
         throw error;
       }
-      // home page doesn't exist
+      // page doesn't exist
 
       // create a Page object
       const subPage = new Page({
@@ -199,7 +199,7 @@ exports.getPage = (req, res, next) => {
         error.statusCode = 404;
         throw error;
       }
-      // if a home page is found
+      // if a page is found
       res.status(200).json({ message: 'page found', page: page });
     })
     .catch((err) => {
