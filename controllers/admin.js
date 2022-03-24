@@ -1,9 +1,10 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const { validationResult } = require('express-validator');
+const { validationResult } = require("express-validator");
 
-const GlobalData = require('../models/globalData');
-const Page = require('../models/page');
+const GlobalData = require("../models/globalData");
+const Page = require("../models/page");
+const User = require("../models/user");
 
 // globalData
 exports.getGlobalData = (req, res, next) => {
@@ -13,7 +14,7 @@ exports.getGlobalData = (req, res, next) => {
     .then((data) => {
       // output data
       if (!data) {
-        const error = new Error('No data found');
+        const error = new Error("No data found");
         error.statusCode = 404;
         throw error;
       }
@@ -62,7 +63,7 @@ exports.putGlobalData = (req, res, next) => {
   GlobalData.findOne({ userId: req.userId })
     .then((data) => {
       if (!data) {
-        const error = new Error('No data found');
+        const error = new Error("No data found");
         error.statusCode = 404;
         throw error;
       }
@@ -73,7 +74,7 @@ exports.putGlobalData = (req, res, next) => {
     })
     .then((result) => {
       res.status(204).json({
-        message: 'Global Data updated successfully!',
+        message: "Global Data updated successfully!",
       });
     })
     .catch((err) => {
@@ -93,7 +94,7 @@ exports.createHome = (req, res, next) => {
     .then((page) => {
       // if the home page already exists, respond with error.
       if (page) {
-        const error = new Error('Home page already exists');
+        const error = new Error("Home page already exists");
         error.statusCode = 405;
         throw error;
       }
@@ -111,7 +112,7 @@ exports.createHome = (req, res, next) => {
     })
     .then((result) => {
       // send a response
-      res.status(201).json({ message: 'Home page created successfully' });
+      res.status(201).json({ message: "Home page created successfully" });
     })
     .catch((err) => {
       if (!err.statusCode) {
@@ -129,12 +130,12 @@ exports.getHome = (req, res, next) => {
     .then((page) => {
       // if no page is found
       if (!page) {
-        const error = new Error('No page found');
+        const error = new Error("No page found");
         error.statusCode = 404;
         throw error;
       }
       // if a home page is found
-      res.status(200).json({ message: 'Home page found', page: page });
+      res.status(200).json({ message: "Home page found", page: page });
     })
     .catch((err) => {
       if (!err.statusCode) {
@@ -142,4 +143,39 @@ exports.getHome = (req, res, next) => {
       }
       next(err);
     });
+};
+
+exports.putSubPage = (req, res, next) => {
+  const updatedContent = req.body.contentTemplates;
+  const siteName = req.params.siteName;
+  const pageName = req.params.pageName;
+
+  // find the home page
+  User.findOne({ siteName: siteName }).then((user) => {
+    Page.findOne({ url: pageName, userId: user._id })
+      .then((page) => {
+        // error when page is not found
+        if (!page) {
+          const error = new Error("No page found");
+          error.statusCode = 404;
+          throw error;
+        }
+        // update the content of the home page
+        page.contentTemplates = updatedContent;
+        return page.save();
+      })
+      .then((result) => {
+        result
+          .status(204)
+          .json({
+            message: "Page updated successfully!",
+          })
+          .catch((err) => {
+            if (!err.statusCode) {
+              err.statusCode = 500;
+            }
+            next(err);
+          });
+      });
+  });
 };
