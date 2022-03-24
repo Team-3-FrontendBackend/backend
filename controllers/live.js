@@ -47,14 +47,46 @@ exports.getHomePage = (req, res, next) => {
       });
     });
   });
+  
 };
 
-exports.getSiteNamePage = (req, res, next) => {
+
+// find user(siteName)
+// global data
+// page name
+
+exports.getSubPage = (req, res, next) => {
   const siteName = req.params.siteName;
   const pageName = req.params.pageName;
 
   // TODO: retrieve page of a user
-  User.findOne({ userId: user._id }).then((data) => {});
+  User.findOne({ siteName: siteName }).then((user) => {
+    GlobalData.findOne({ userId: user._id}).then((data) => {
+      Page.findOne({ pageName: pageName, userId: data.userId }).then((page) => {
+
+        // retrieve data from page
+        const pageUrl = page.url;
+        const contentTemplates = page.contentTemplates;
+        const pageName = page.name;
+        const userId = page.userId;
+
+        //return data as json
+        res.status(200).json({
+          pageUrl: pageUrl,
+          contentTemplates: contentTemplates,
+          pageName: pageName,
+          userId: userId
+        })
+      })
+      //catch error
+      .catch((err) => {
+        if (!err.statusCode) {
+          err.statusCode = 500;
+        }
+        next(err);
+      });
+    })
+  });
 };
 
 // const mongoose = require('mongoose');
