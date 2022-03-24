@@ -4,8 +4,6 @@ const { validationResult } = require('express-validator');
 
 const GlobalData = require('../models/globalData');
 const Page = require('../models/page');
-const globalData = require('../models/globalData');
-
 
 /* Global Data */
 
@@ -153,12 +151,12 @@ exports.getHome = (req, res, next) => {
 
 exports.createPage = (req, res, next) => {
   // get important data
-  const url = req.params.siteName;
+  // const siteUrl = req.params.siteName;
+  const pageUrl = req.params.pageName;
   const name = req.body.name;
-  
-  globalData.nav.findOne({links: links })
+  const contentTemplates = req.body.contentTemplates;
 
-  Page.findOne({ url: url, userId: req.userId })
+  Page.findOne({ url: pageName, userId: req.userId })
     .then((page) => {
       // if the page already exists, respond with error.
       if (page) {
@@ -170,17 +168,30 @@ exports.createPage = (req, res, next) => {
 
       // create a Page object
       const subPage = new Page({
-        url: url,
-        contentTemplates: [],
+        url: pageUrl,
+        contentTemplates: contentTemplates,
         name: name,
         userId: mongoose.Types.ObjectId(req.userId),
       });
 
-      // add url to navigation
-      links.push(url);
-
       // save the page object
       return subPage.save();
+    })
+    .then((result) => {
+      // find the global data
+      return GlobalData.findOne({ userId: req.userId });
+    })
+    .then((data) => {
+      // make sure we found data
+      if (!data) {
+        const error = new Error('No globalData associated with user');
+        error.statusCode = 404;
+        throw error;
+      }
+      // update the nav links and save the data object
+      const newLinks = [...data.nav.links, pageUrl];
+      data.nav.links = newLinks;
+      return data.save();
     })
     .then((result) => {
       // send a response
@@ -196,9 +207,10 @@ exports.createPage = (req, res, next) => {
 
 exports.getPage = (req, res, next) => {
   // get necessary data
-  const url = req.params.siteName;
+  // const siteUrl = req.params.siteName;
+  const pageUrl = req.params.pageName;
 
-  Page.findOne({ url: url, userId: req.userId })
+  Page.findOne({ url: pageUrl, userId: req.userId })
     .then((page) => {
       // if no page is found
       if (!page) {
