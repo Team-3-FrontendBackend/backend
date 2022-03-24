@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.get('/:siteName', liveController.getHomePage);
 
-router.get('/:siteName/:pageName', liveController.getSubPage);
+router.get('/:siteName/:pageUrl', liveController.getSubPage);
 
 module.exports = router;
