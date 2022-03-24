@@ -4,6 +4,7 @@ const { validationResult } = require('express-validator');
 
 const GlobalData = require('../models/globalData');
 const Page = require('../models/page');
+const globalData = require('../models/globalData');
 
 
 /* Global Data */
@@ -154,6 +155,8 @@ exports.createPage = (req, res, next) => {
   // get important data
   const url = req.params.siteName;
   const name = req.body.name;
+  
+  globalData.nav.findOne({links: links })
 
   Page.findOne({ url: url, userId: req.userId })
     .then((page) => {
@@ -172,6 +175,10 @@ exports.createPage = (req, res, next) => {
         name: name,
         userId: mongoose.Types.ObjectId(req.userId),
       });
+
+      // add url to navigation
+      links.push(url);
+
       // save the page object
       return subPage.save();
     })
