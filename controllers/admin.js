@@ -152,9 +152,11 @@ exports.updateSubPage = (req, res, next) => {
   const updatedContent = req.body.contentTemplates;
   const siteName = req.params.siteName;
   const pageName = req.params.pageName;
+  
+  const url = "/".concat(siteName);
 
   // find the home page
-  User.findOne({ siteName: siteName })
+  User.findOne({ url: url })
     .then((user) => {
       return Page.findOne({ url: pageName, userId: user._id });
     })
