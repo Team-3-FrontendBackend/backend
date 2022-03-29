@@ -6,7 +6,8 @@ const GlobalData = require("../models/globalData");
 const Page = require("../models/page");
 const User = require("../models/user");
 
-// globalData
+/* Global Data */
+
 exports.getGlobalData = (req, res, next) => {
   const errors = validationResult(req);
 
@@ -84,6 +85,8 @@ exports.putGlobalData = (req, res, next) => {
       next(err);
     });
 };
+
+/* Home Page */
 
 exports.createHome = (req, res, next) => {
   // get important data
@@ -178,4 +181,118 @@ exports.putSubPage = (req, res, next) => {
           });
       });
   });
+
+exports.updateHome = (req, res, next) => {
+  // content being received
+  const url = req.params.siteName;
+  const contentTemplates = req.body.contentTemplates;
+  const name = req.body.name;
+
+  // find the home page
+  Page.findOne({ url: url, userId: req.userId })
+    .then((page) => {
+      // check to make sure we got a page
+      if (!page) {
+        const error = new Error('No page found');
+        error.statusCode = 404;
+        throw error;
+      }
+      // if we found a page update the content
+      page.contentTemplates = contentTemplates;
+      page.name = name;
+
+      // save the page object
+      return page.save();
+    })
+    .then((result) => {
+      res.status(204).json({ message: 'Page updated successfully' });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
+/* Sub Pages */
+
+exports.createPage = (req, res, next) => {
+  // get important data
+  // const siteUrl = req.params.siteName;
+  const pageUrl = req.params.pageName;
+  const name = req.body.name;
+  const contentTemplates = req.body.contentTemplates;
+
+  Page.findOne({ url: pageName, userId: req.userId })
+    .then((page) => {
+      // if the page already exists, respond with error.
+      if (page) {
+        const error = new Error('Page already exists');
+        error.statusCode = 405;
+        throw error;
+      }
+      // page doesn't exist
+
+      // create a Page object
+      const subPage = new Page({
+        url: pageUrl,
+        contentTemplates: contentTemplates,
+        name: name,
+        userId: mongoose.Types.ObjectId(req.userId),
+      });
+
+      // save the page object
+      return subPage.save();
+    })
+    .then((result) => {
+      // find the global data
+      return GlobalData.findOne({ userId: req.userId });
+    })
+    .then((data) => {
+      // make sure we found data
+      if (!data) {
+        const error = new Error('No globalData associated with user');
+        error.statusCode = 404;
+        throw error;
+      }
+      // update the nav links and save the data object
+      const newLinks = [...data.nav.links, pageUrl];
+      data.nav.links = newLinks;
+      return data.save();
+    })
+    .then((result) => {
+      // send a response
+      res.status(201).json({ message: 'Page created successfully' });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
+exports.getPage = (req, res, next) => {
+  // get necessary data
+  // const siteUrl = req.params.siteName;
+  const pageUrl = req.params.pageName;
+
+  Page.findOne({ url: pageUrl, userId: req.userId })
+    .then((page) => {
+      // if no page is found
+      if (!page) {
+        const error = new Error('No page found');
+        error.statusCode = 404;
+        throw error;
+      }
+      // if a page is found
+      res.status(200).json({ message: 'page found', page: page });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
 };
