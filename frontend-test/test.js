@@ -54,7 +54,7 @@ fetch(herokuLogin, {
     // getGlobalData();
     // createHome();
     // getHome();
-    updateHome();
+    // updateHome();
     getHome();
   })
   .catch((err) => console.log(err));
