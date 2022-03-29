@@ -1,7 +1,7 @@
-const User = require('../models/user');
-const Page = require('../models/page');
-const GlobalData = require('../models/globalData');
-const user = require('../models/user');
+const User = require("../models/user");
+const Page = require("../models/page");
+const GlobalData = require("../models/globalData");
+const user = require("../models/user");
 
 exports.getHomePage = (req, res, next) => {
   const siteName = req.params.siteName;
@@ -45,6 +45,12 @@ exports.getHomePage = (req, res, next) => {
 
       // retrieve the name of the page
       name = page.name;
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
     });
 
   // return data as a json
