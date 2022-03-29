@@ -148,39 +148,41 @@ exports.getHome = (req, res, next) => {
     });
 };
 
-exports.putSubPage = (req, res, next) => {
+exports.updateSubPage = (req, res, next) => {
   const updatedContent = req.body.contentTemplates;
   const siteName = req.params.siteName;
   const pageName = req.params.pageName;
 
   // find the home page
-  User.findOne({ siteName: siteName }).then((user) => {
-    Page.findOne({ url: pageName, userId: user._id })
-      .then((page) => {
-        // error when page is not found
-        if (!page) {
-          const error = new Error("No page found");
-          error.statusCode = 404;
-          throw error;
-        }
-        // update the content of the home page
-        page.contentTemplates = updatedContent;
-        return page.save();
-      })
-      .then((result) => {
-        result
-          .status(204)
-          .json({
-            message: "Page updated successfully!",
-          })
-          .catch((err) => {
-            if (!err.statusCode) {
-              err.statusCode = 500;
-            }
-            next(err);
-          });
-      });
-  });
+  User.findOne({ siteName: siteName })
+    .then((user) => {
+      return Page.findOne({ url: pageName, userId: user._id });
+    })
+    .then((page) => {
+      // error when page is not found
+      if (!page) {
+        const error = new Error("No page found");
+        error.statusCode = 404;
+        throw error;
+      }
+      // update the content of the home page
+      page.contentTemplates = updatedContent;
+      return page.save();
+    })
+    .then((result) => {
+      result
+        .status(204)
+        .json({
+          message: "Page updated successfully!",
+        })
+        .catch((err) => {
+          if (!err.statusCode) {
+            err.statusCode = 500;
+          }
+          next(err);
+        });
+    });
+};
 
 exports.updateHome = (req, res, next) => {
   // content being received
@@ -193,7 +195,7 @@ exports.updateHome = (req, res, next) => {
     .then((page) => {
       // check to make sure we got a page
       if (!page) {
-        const error = new Error('No page found');
+        const error = new Error("No page found");
         error.statusCode = 404;
         throw error;
       }
@@ -205,7 +207,7 @@ exports.updateHome = (req, res, next) => {
       return page.save();
     })
     .then((result) => {
-      res.status(204).json({ message: 'Page updated successfully' });
+      res.status(204).json({ message: "Page updated successfully" });
     })
     .catch((err) => {
       if (!err.statusCode) {
@@ -228,7 +230,7 @@ exports.createPage = (req, res, next) => {
     .then((page) => {
       // if the page already exists, respond with error.
       if (page) {
-        const error = new Error('Page already exists');
+        const error = new Error("Page already exists");
         error.statusCode = 405;
         throw error;
       }
@@ -252,7 +254,7 @@ exports.createPage = (req, res, next) => {
     .then((data) => {
       // make sure we found data
       if (!data) {
-        const error = new Error('No globalData associated with user');
+        const error = new Error("No globalData associated with user");
         error.statusCode = 404;
         throw error;
       }
@@ -263,7 +265,7 @@ exports.createPage = (req, res, next) => {
     })
     .then((result) => {
       // send a response
-      res.status(201).json({ message: 'Page created successfully' });
+      res.status(201).json({ message: "Page created successfully" });
     })
     .catch((err) => {
       if (!err.statusCode) {
@@ -282,12 +284,12 @@ exports.getPage = (req, res, next) => {
     .then((page) => {
       // if no page is found
       if (!page) {
-        const error = new Error('No page found');
+        const error = new Error("No page found");
         error.statusCode = 404;
         throw error;
       }
       // if a page is found
-      res.status(200).json({ message: 'page found', page: page });
+      res.status(200).json({ message: "page found", page: page });
     })
     .catch((err) => {
       if (!err.statusCode) {
