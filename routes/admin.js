@@ -13,6 +13,12 @@ router.post('/:siteName', isAuth, adminController.createHome);
 
 router.get('/:siteName', isAuth, adminController.getHome);
 
+// updating home page
+// router.put('/:siteName', isAuth, adminController.putHome)
+
+// updating sub page
+router.put('/:siteName/:pageName', isAuth, adminController.putSubPage)
+
 router.put('/:siteName', isAuth, adminController.updateHome);
 
 router.post('/:siteName/:pageName', isAuth, adminController.createPage);
