@@ -5,6 +5,7 @@ const user = require("../models/user");
 
 exports.getHomePage = (req, res, next) => {
   const siteName = req.params.siteName;
+  const url = "/".concat(siteName);
 
   let headerLogoUrl;
   let headerBackgroundColor;
@@ -14,7 +15,7 @@ exports.getHomePage = (req, res, next) => {
   let content;
   let name;
 
-  User.findOne({ siteName: siteName })
+  User.findOne({ url: url })
     .then((user) => {
       return GlobalData.findOne({ userId: user._id });
     })
@@ -69,8 +70,10 @@ exports.getSubPage = (req, res, next) => {
   const siteName = req.params.siteName;
   const pageUrl = req.params.pageUrl;
 
+  const url = "/".concat(siteName);
+
   // TODO: retrieve page of a user
-  User.findOne({ siteName: siteName })
+  User.findOne({ url: url })
     .then((user) => {
       return GlobalData.findOne({ userId: user._id });
     })
