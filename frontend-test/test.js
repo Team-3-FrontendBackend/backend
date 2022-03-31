@@ -7,6 +7,7 @@ const url2 = 'http://localhost:3000/login';
 const adminHomeUrl = 'http://localhost:3000/admin/joes-site';
 const putHomePage = 'http://localhost:3000/admin/joes-site';
 const adminSubPage = 'http://localhost:3000/admin/joes-site/reviews';
+const putSubPage = 'http://localhost:3000/admin/joes-site/reviews';
 
 const herokuSignUp = 'https://cms-societies.herokuapp.com/signup';
 const herokuLogin = 'https://cms-societies.herokuapp.com/login';
@@ -175,4 +176,23 @@ const getSubPage = () => {
   })
   .then((result) => result.json())
   .then((result) => console.log(result));
+}
+
+const updateSubPage =() => {
+  fetch(putSubPage, {
+    method: 'PUT ',
+    headers: {
+      Authorization: 'Bearer ' + jwt.toString(),
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      contentTemplates: [
+        'This is some content here',
+        'Here is some more content',
+      ],
+      name: 'Joes Review Page',
+    }),
+  })
+    .then((result) => result.json())
+    .then((result) => console.log(result));
 }
