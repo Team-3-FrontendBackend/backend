@@ -156,7 +156,7 @@ exports.createHome = (req, res, next) => {
         throw error;
       }
       // update the nav links and save the data object
-      const newLinks = [...data.nav.links, pageUrl];
+      const newLinks = [...data.nav.links, url];
       data.nav.links = newLinks;
       return data.save();
     })
