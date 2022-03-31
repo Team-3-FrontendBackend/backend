@@ -29,8 +29,8 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.use(authRoutes);
-app.use(liveRoutes);
+app.use(authRoutes);
+app.use('/live', liveRoutes);
 app.use('/admin', adminRoutes);
 
 app.use((error, req, res, next) => {
