@@ -269,12 +269,12 @@ exports.updateHome = (req, res, next) => {
 
 exports.createPage = (req, res, next) => {
   // get important data
-  // const siteUrl = req.params.siteName;
-  const pageUrl = req.params.pageName;
+  const siteUrl = req.params.siteName;
+  const pageUrl = siteUrl + '/' + req.params.pageName;
   const name = req.body.name;
   const contentTemplates = req.body.contentTemplates;
 
-  Page.findOne({ url: pageName, userId: req.userId })
+  Page.findOne({ url: pageUrl, userId: req.userId })
     .then((page) => {
       // if the page already exists, respond with error.
       if (page) {
@@ -325,8 +325,8 @@ exports.createPage = (req, res, next) => {
 
 exports.getPage = (req, res, next) => {
   // get necessary data
-  // const siteUrl = req.params.siteName;
-  const pageUrl = req.params.pageName;
+  const siteUrl = req.params.siteName;
+  const pageUrl = siteUrl + '/' + req.params.pageName;
 
   Page.findOne({ url: pageUrl, userId: req.userId })
     .then((page) => {
