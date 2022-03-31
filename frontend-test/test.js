@@ -14,7 +14,7 @@ const herokuGetGlobalData =
 const herokuPutGlobalData =
   'https://cms-societies.herokuapp.com/admin/global-data';
 
-const liveSubPage = "http://localhost:3000/finances/home"
+const liveSubPage = "http://localhost:3000/finances/home";
 
 // const signUp = () => {
 //   fetch(signUpUrl, {
