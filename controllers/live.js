@@ -1,11 +1,11 @@
-const User = require("../models/user");
-const Page = require("../models/page");
-const GlobalData = require("../models/globalData");
-const user = require("../models/user");
+const User = require('../models/user');
+const Page = require('../models/page');
+const GlobalData = require('../models/globalData');
+const user = require('../models/user');
 
 exports.getHomePage = (req, res, next) => {
   const siteName = req.params.siteName;
-  const url = "/".concat(siteName);
+  const url = '/'.concat(siteName);
 
   let headerLogoUrl;
   let headerBackgroundColor;
@@ -36,7 +36,7 @@ exports.getHomePage = (req, res, next) => {
     .then((page) => {
       // error handling when no page is found
       if (!page) {
-        const error = new Error("No page found");
+        const error = new Error('No page found');
         error.statusCode = 404;
         throw error;
       }
@@ -68,9 +68,10 @@ exports.getHomePage = (req, res, next) => {
 
 exports.getSubPage = (req, res, next) => {
   const siteName = req.params.siteName;
-  const pageUrl = req.params.pageUrl;
+  const pageUrl = siteName + '/' + req.params.pageUrl;
 
-  const url = "/".concat(siteName);
+  const url = '/'.concat(siteName);
+  console.log(url);
 
   let headerLogoUrl;
   let headerBackgroundColor;
@@ -81,6 +82,11 @@ exports.getSubPage = (req, res, next) => {
   // TODO: retrieve page of a user
   User.findOne({ url: url })
     .then((user) => {
+      if (!user) {
+        const error = new Error('No user found');
+        error.statusCode = 404;
+        throw error;
+      }
       return GlobalData.findOne({ userId: user._id });
     })
     .then((data) => {
@@ -98,8 +104,13 @@ exports.getSubPage = (req, res, next) => {
       return Page.findOne({ userId: data.userId });
     })
     .then((page) => {
+      if (!page) {
+        const error = new Error('No page found');
+        error.statusCode = 404;
+        throw error;
+      }
       // retrieve data from page
-      const pageUrl = page.url;
+      const url = page.url;
       const contentTemplates = page.contentTemplates;
       const pageName = page.name;
       const userId = page.userId;
