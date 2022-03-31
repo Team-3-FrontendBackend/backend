@@ -197,7 +197,7 @@ exports.getHome = (req, res, next) => {
 exports.updateSubPage = (req, res, next) => {
   const updatedContent = req.body.contentTemplates;
   const siteName = req.params.siteName;
-  const pageName = req.params.pageName;
+  const pageName = siteName + '/' + req.params.pageName;
 
   const url = '/'.concat(siteName);
 
@@ -218,17 +218,13 @@ exports.updateSubPage = (req, res, next) => {
       return page.save();
     })
     .then((result) => {
-      result
-        .status(204)
-        .json({
-          message: 'Page updated successfully!',
-        })
-        .catch((err) => {
-          if (!err.statusCode) {
-            err.statusCode = 500;
-          }
-          next(err);
-        });
+      res.status(204).json({ message: 'Page updated successfully' });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
     });
 };
 
