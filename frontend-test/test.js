@@ -14,6 +14,8 @@ const herokuGetGlobalData =
 const herokuPutGlobalData =
   'https://cms-societies.herokuapp.com/admin/global-data';
 
+const liveSubPage = "http://localhost:3000/finances/home"
+
 // const signUp = () => {
 //   fetch(signUpUrl, {
 //     method: 'POST',
@@ -162,3 +164,15 @@ const createPage = () => {
 const getPage = () => {
   fetch('', {});
 };
+
+const getSubPage = () => {
+  fetch(liveSubPage, { 
+    method: 'GET', 
+    headers: {
+      Authorization: 'Bearer ' + jwt.toString(),
+    }, 
+    
+  })
+  .then((result) => result.json())
+  .then((result) => console.log(result));
+}
