@@ -72,13 +72,30 @@ exports.getSubPage = (req, res, next) => {
 
   const url = "/".concat(siteName);
 
+  let headerLogoUrl;
+  let headerBackgroundColor;
+  let navLinks;
+  let footerContact;
+  let footerSocials;
+
   // TODO: retrieve page of a user
   User.findOne({ url: url })
     .then((user) => {
       return GlobalData.findOne({ userId: user._id });
     })
     .then((data) => {
-      return Page.findOne({ url: pageUrl, userId: data.userId });
+      // retrieve globalData from header
+      headerLogoUrl = data.header.logoUrl;
+      headerBackgroundColor = data.header.backgroundColor;
+
+      // retrieve globalData from nav
+      navLinks = data.nav.links;
+
+      // retrieve globalData from footer
+      footerContact = data.footer.contact;
+      footerSocials = data.footer.socialLinks;
+
+      return Page.findOne({ userId: data.userId });
     })
     .then((page) => {
       // retrieve data from page
@@ -89,7 +106,12 @@ exports.getSubPage = (req, res, next) => {
 
       //return data as json
       res.status(200).json({
-        pageUrl: pageUrl,
+        headerLogoUrl: headerLogoUrl,
+        headerBackgroundColor: headerBackgroundColor,
+        navLinks: navLinks,
+        footerContact: footerContact,
+        footerSocials: footerSocials,
+        pageURL: pageUrl,
         contentTemplates: contentTemplates,
         pageName: pageName,
         userId: userId,
