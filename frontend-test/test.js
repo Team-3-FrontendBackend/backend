@@ -6,6 +6,7 @@ const putGlobalDataUrl = 'http://localhost:3000/admin/global-data';
 const url2 = 'http://localhost:3000/login';
 const adminHomeUrl = 'http://localhost:3000/admin/joes-site';
 const putHomePage = 'http://localhost:3000/admin/joes-site';
+const adminSubPage = 'http://localhost:3000/admin/joes-site/reviews';
 
 const herokuSignUp = 'https://cms-societies.herokuapp.com/signup';
 const herokuLogin = 'https://cms-societies.herokuapp.com/login';
@@ -14,7 +15,6 @@ const herokuGetGlobalData =
 const herokuPutGlobalData =
   'https://cms-societies.herokuapp.com/admin/global-data';
 
-const liveSubPage = "http://localhost:3000/finances/home";
 
 // const signUp = () => {
 //   fetch(signUpUrl, {
@@ -166,7 +166,7 @@ const getPage = () => {
 };
 
 const getSubPage = () => {
-  fetch(liveSubPage, { 
+  fetch(adminSubPage, { 
     method: 'GET', 
     headers: {
       Authorization: 'Bearer ' + jwt.toString(),

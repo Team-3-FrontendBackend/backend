@@ -62,3 +62,6 @@ GET https://cms-societies.herokuapp.com/joes-site/reviews
 
 ###
 Get http://localhost:3000/live/joes-site
+
+###
+GET https://cms-societies.herokuapp.com/live/joes-site/reviews
