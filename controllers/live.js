@@ -71,7 +71,6 @@ exports.getSubPage = (req, res, next) => {
   const pageUrl = siteName + '/' + req.params.pageUrl;
 
   const url = '/'.concat(siteName);
-  console.log(url);
 
   let headerLogoUrl;
   let headerBackgroundColor;
@@ -122,7 +121,7 @@ exports.getSubPage = (req, res, next) => {
         navLinks: navLinks,
         footerContact: footerContact,
         footerSocials: footerSocials,
-        pageURL: pageUrl,
+        pageURL: url,
         contentTemplates: contentTemplates,
         pageName: pageName,
         userId: userId,
