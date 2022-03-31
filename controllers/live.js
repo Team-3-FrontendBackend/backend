@@ -100,7 +100,7 @@ exports.getSubPage = (req, res, next) => {
       footerContact = data.footer.contact;
       footerSocials = data.footer.socialLinks;
 
-      return Page.findOne({ userId: data.userId });
+      return Page.findOne({ url: pageUrl, userId: data.userId });
     })
     .then((page) => {
       if (!page) {
