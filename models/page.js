@@ -8,7 +8,7 @@ const pageSchema = new Schema({
   },
   contentTemplates: [
     {
-      type: String,
+      type: Object,
     },
   ],
   name: {
