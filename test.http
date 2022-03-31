@@ -49,3 +49,18 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpvZSIsInVzZXJJZCI6IjYyM2EwZjYwNzMyYjI2M2UzMDg0NmQ0YiIsImlhdCI6MTY0ODY4NTk2MiwiZXhwIjoxNjQ4Njg5NTYyfQ.jIYOB3JlxU93v5Dor5Ih9btM20IALZPlp-d3APjlvZU
 
 { "name": "Joes Site Home" }
+
+###
+POST https://cms-societies.herokuapp.com/admin/joes-site/reviews
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpvZSIsInVzZXJJZCI6IjYyM2EwZjYwNzMyYjI2M2UzMDg0NmQ0YiIsImlhdCI6MTY0ODc0Mjc0MCwiZXhwIjoxNjQ4NzQ2MzQwfQ.KttEuwRV4IrIFeamX5YuwQ0Whpon1DjtMDK3LE8hygM
+
+{ "name":"Reviews Page", "contentTemplates":[{}]}
+
+###
+GET https://cms-societies.herokuapp.com/live/joes-site/reviews
+
+###
+GET http://localhost:3000/admin/joes-site/reviews
+Content-Type: application/json
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpvZSIsInVzZXJJZCI6IjYyM2EwZjYwNzMyYjI2M2UzMDg0NmQ0YiIsImlhdCI6MTY0ODc0NDA5OSwiZXhwIjoxNjQ4NzQ3Njk5fQ.okhOnkeXiJrkFlI256VGDe5csjJfzbzBWGsTu2Or9rA

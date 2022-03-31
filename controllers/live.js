@@ -46,6 +46,17 @@ exports.getHomePage = (req, res, next) => {
 
       // retrieve the name of the page
       name = page.name;
+
+      // return data as a json
+      res.status(200).json({
+        headerLogoUrl: headerLogoUrl,
+        headerBackgroundColor: headerBackgroundColor,
+        navLinks: navLinks,
+        footerContact: footerContact,
+        footerSocials: footerSocials,
+        content: content,
+        name: name,
+      });
     })
     .catch((err) => {
       if (!err.statusCode) {
@@ -53,17 +64,6 @@ exports.getHomePage = (req, res, next) => {
       }
       next(err);
     });
-
-  // return data as a json
-  res.status(200).json({
-    headerLogoUrl: headerLogoUrl,
-    headerBackgroundColor: headerBackgroundColor,
-    navLinks: navLinks,
-    footerContact: footerContact,
-    footerSocials: footerSocials,
-    content: content,
-    name: name,
-  });
 };
 
 exports.getSubPage = (req, res, next) => {
