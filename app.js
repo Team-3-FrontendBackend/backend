@@ -14,7 +14,7 @@ const app = express();
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
 const isAuth = require('./middleware/is-auth');
-// const liveRoutes = require('./routes/live');
+const liveRoutes = require('./routes/live');
 
 app.use(bodyParser.json()); // application/json
 // app.use(bodyParser.urlencoded({ extended: false }));
