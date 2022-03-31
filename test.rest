@@ -58,4 +58,4 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpvZ
 { "name":"Reviews Page", "contentTemplates":[{}]}
 
 ###
-GET https://cms-societies.herokuapp.com/joes-site/reviews
+GET https://cms-societies.herokuapp.com/live/joes-site/reviews
