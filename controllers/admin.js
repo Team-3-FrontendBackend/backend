@@ -1,10 +1,40 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const { validationResult } = require("express-validator");
+const { validationResult } = require('express-validator');
 
-const GlobalData = require("../models/globalData");
-const Page = require("../models/page");
-const User = require("../models/user");
+const GlobalData = require('../models/globalData');
+const Page = require('../models/page');
+const User = require('../models/user');
+
+/* Admin page route */
+
+exports.getAdmin = (req, res, next) => {
+  // get a list of all the sites
+  GlobalData.findOne({ userId: req.userId })
+    .then((data) => {
+      if (!data) {
+        const error = new Error('No data found');
+        error.statusCode = 404;
+        throw error;
+      }
+
+      const url = 'https://cms-societies.herokuapp.com/admin/';
+
+      const urls = [];
+      data.nav.links.forEach((link) => {
+        urls.push(url + link);
+      });
+      console.log(urls);
+      // if data is found
+      res.status(200).json({ links: urls });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
 
 /* Global Data */
 
@@ -15,7 +45,7 @@ exports.getGlobalData = (req, res, next) => {
     .then((data) => {
       // output data
       if (!data) {
-        const error = new Error("No data found");
+        const error = new Error('No data found');
         error.statusCode = 404;
         throw error;
       }
@@ -64,7 +94,7 @@ exports.putGlobalData = (req, res, next) => {
   GlobalData.findOne({ userId: req.userId })
     .then((data) => {
       if (!data) {
-        const error = new Error("No data found");
+        const error = new Error('No data found');
         error.statusCode = 404;
         throw error;
       }
@@ -75,7 +105,7 @@ exports.putGlobalData = (req, res, next) => {
     })
     .then((result) => {
       res.status(204).json({
-        message: "Global Data updated successfully!",
+        message: 'Global Data updated successfully!',
       });
     })
     .catch((err) => {
@@ -97,7 +127,7 @@ exports.createHome = (req, res, next) => {
     .then((page) => {
       // if the home page already exists, respond with error.
       if (page) {
-        const error = new Error("Home page already exists");
+        const error = new Error('Home page already exists');
         error.statusCode = 405;
         throw error;
       }
@@ -114,8 +144,24 @@ exports.createHome = (req, res, next) => {
       return homePage.save();
     })
     .then((result) => {
+      // get the global data and update the links
+      return GlobalData.findOne({ userId: req.userId });
       // send a response
-      res.status(201).json({ message: "Home page created successfully" });
+    })
+    .then((data) => {
+      // make sure we found data
+      if (!data) {
+        const error = new Error('No globalData associated with user');
+        error.statusCode = 404;
+        throw error;
+      }
+      // update the nav links and save the data object
+      const newLinks = [...data.nav.links, pageUrl];
+      data.nav.links = newLinks;
+      return data.save();
+    })
+    .then((result) => {
+      res.status(201).json({ message: 'Home page created successfully' });
     })
     .catch((err) => {
       if (!err.statusCode) {
@@ -133,12 +179,12 @@ exports.getHome = (req, res, next) => {
     .then((page) => {
       // if no page is found
       if (!page) {
-        const error = new Error("No page found");
+        const error = new Error('No page found');
         error.statusCode = 404;
         throw error;
       }
       // if a home page is found
-      res.status(200).json({ message: "Home page found", page: page });
+      res.status(200).json({ message: 'Home page found', page: page });
     })
     .catch((err) => {
       if (!err.statusCode) {
@@ -152,8 +198,8 @@ exports.updateSubPage = (req, res, next) => {
   const updatedContent = req.body.contentTemplates;
   const siteName = req.params.siteName;
   const pageName = req.params.pageName;
-  
-  const url = "/".concat(siteName);
+
+  const url = '/'.concat(siteName);
 
   // find the home page
   User.findOne({ url: url })
@@ -163,7 +209,7 @@ exports.updateSubPage = (req, res, next) => {
     .then((page) => {
       // error when page is not found
       if (!page) {
-        const error = new Error("No page found");
+        const error = new Error('No page found');
         error.statusCode = 404;
         throw error;
       }
@@ -175,7 +221,7 @@ exports.updateSubPage = (req, res, next) => {
       result
         .status(204)
         .json({
-          message: "Page updated successfully!",
+          message: 'Page updated successfully!',
         })
         .catch((err) => {
           if (!err.statusCode) {
@@ -197,7 +243,7 @@ exports.updateHome = (req, res, next) => {
     .then((page) => {
       // check to make sure we got a page
       if (!page) {
-        const error = new Error("No page found");
+        const error = new Error('No page found');
         error.statusCode = 404;
         throw error;
       }
@@ -209,7 +255,7 @@ exports.updateHome = (req, res, next) => {
       return page.save();
     })
     .then((result) => {
-      res.status(204).json({ message: "Page updated successfully" });
+      res.status(204).json({ message: 'Page updated successfully' });
     })
     .catch((err) => {
       if (!err.statusCode) {
@@ -232,7 +278,7 @@ exports.createPage = (req, res, next) => {
     .then((page) => {
       // if the page already exists, respond with error.
       if (page) {
-        const error = new Error("Page already exists");
+        const error = new Error('Page already exists');
         error.statusCode = 405;
         throw error;
       }
@@ -256,7 +302,7 @@ exports.createPage = (req, res, next) => {
     .then((data) => {
       // make sure we found data
       if (!data) {
-        const error = new Error("No globalData associated with user");
+        const error = new Error('No globalData associated with user');
         error.statusCode = 404;
         throw error;
       }
@@ -267,7 +313,7 @@ exports.createPage = (req, res, next) => {
     })
     .then((result) => {
       // send a response
-      res.status(201).json({ message: "Page created successfully" });
+      res.status(201).json({ message: 'Page created successfully' });
     })
     .catch((err) => {
       if (!err.statusCode) {
@@ -286,12 +332,12 @@ exports.getPage = (req, res, next) => {
     .then((page) => {
       // if no page is found
       if (!page) {
-        const error = new Error("No page found");
+        const error = new Error('No page found');
         error.statusCode = 404;
         throw error;
       }
       // if a page is found
-      res.status(200).json({ message: "page found", page: page });
+      res.status(200).json({ message: 'page found', page: page });
     })
     .catch((err) => {
       if (!err.statusCode) {

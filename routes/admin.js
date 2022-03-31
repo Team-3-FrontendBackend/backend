@@ -13,12 +13,14 @@ router.post('/:siteName', isAuth, adminController.createHome);
 
 router.get('/:siteName', isAuth, adminController.getHome);
 
-router.put('/:siteName/:pageName', isAuth, adminController.updateSubPage)
+router.put('/:siteName/:pageName', isAuth, adminController.updateSubPage);
 
 router.put('/:siteName', isAuth, adminController.updateHome);
 
 router.post('/:siteName/:pageName', isAuth, adminController.createPage);
 
 router.get('/:siteName/:pageName', isAuth, adminController.getPage);
+
+router.get('/', isAuth, adminController.getAdmin);
 
 module.exports = router;
