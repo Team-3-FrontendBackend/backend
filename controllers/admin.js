@@ -195,6 +195,7 @@ exports.getHome = (req, res, next) => {
 };
 
 exports.updateSubPage = (req, res, next) => {
+  const name = req.body.name;
   const updatedContent = req.body.contentTemplates;
   const siteName = req.params.siteName;
   const pageName = siteName + '/' + req.params.pageName;
@@ -214,6 +215,7 @@ exports.updateSubPage = (req, res, next) => {
         throw error;
       }
       // update the content of the home page
+      page.name = name;
       page.contentTemplates = updatedContent;
       return page.save();
     })

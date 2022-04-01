@@ -1,7 +1,6 @@
 const User = require('../models/user');
 const Page = require('../models/page');
 const GlobalData = require('../models/globalData');
-const user = require('../models/user');
 
 exports.getHomePage = (req, res, next) => {
   const siteName = req.params.siteName;
@@ -124,7 +123,6 @@ exports.getSubPage = (req, res, next) => {
         pageURL: url,
         contentTemplates: contentTemplates,
         pageName: pageName,
-        userId: userId,
       });
     })
     //catch error
