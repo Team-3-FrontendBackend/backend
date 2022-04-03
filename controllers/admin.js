@@ -120,10 +120,21 @@ exports.putGlobalData = (req, res, next) => {
 
 exports.createHome = (req, res, next) => {
   // get important data
-  const url = req.params.siteName;
   const name = req.body.name;
+  let userUrl;
 
-  Page.findOne({ url: url, userId: req.userId })
+  // get the user object so we can check if a home page already exists.
+  User.findOne({ userId: req.userId })
+    .then((user) => {
+      if (!user) {
+        const error = new Error('No user found');
+        error.statusCode = 405;
+        throw error;
+      }
+      userUrl = user.url.split('/')[1];
+
+      return Page.findOne({ url: userUrl, userId: req.userId });
+    })
     .then((page) => {
       // if the home page already exists, respond with error.
       if (page) {
@@ -135,7 +146,7 @@ exports.createHome = (req, res, next) => {
 
       // create a Page object
       const homePage = new Page({
-        url: url,
+        url: userUrl,
         contentTemplates: [],
         name: name,
         userId: mongoose.Types.ObjectId(req.userId),
@@ -156,7 +167,7 @@ exports.createHome = (req, res, next) => {
         throw error;
       }
       // update the nav links and save the data object
-      const newLinks = [...data.nav.links, url];
+      const newLinks = [...data.nav.links, userUrl];
       data.nav.links = newLinks;
       return data.save();
     })
