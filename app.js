@@ -16,7 +16,7 @@ const adminRoutes = require('./routes/admin');
 const isAuth = require('./middleware/is-auth');
 const liveRoutes = require('./routes/live');
 
-app.use(bodyParser.json()); // application/json
+app.use(bodyParser.json({ limit: '400kb' })); // application/json
 // app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use((req, res, next) => {

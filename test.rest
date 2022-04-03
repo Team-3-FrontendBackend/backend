@@ -76,4 +76,4 @@ Get http://localhost:3000/live/joes-site
 Get http://localhost:3000/live/joes-site/reviews
 
 ###
-GET https://cms-societies.herokuapp.com/live/joes-site/reviews
+GET https://cms-societies.herokuapp.com/live/joes-site
