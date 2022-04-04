@@ -50,8 +50,13 @@ exports.postSignup = (req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
-  const url = req.body.url;
+  let url = req.body.url;
   const siteName = req.body.siteName;
+
+  // make sure there is always a "/" in front of the url
+  if (url.charAt(0) !== '/') {
+    url = '/' + req.body.url;
+  }
 
   // make sure the user doesn't already exist
   User.findOne({ username: username })

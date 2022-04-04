@@ -126,6 +126,7 @@ exports.createHome = (req, res, next) => {
   // get the user object so we can check if a home page already exists.
   User.findOne({ _id: req.userId })
     .then((user) => {
+      console.log(user);
       if (!user) {
         const error = new Error('No user found');
         error.statusCode = 405;

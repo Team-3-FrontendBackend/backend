@@ -95,13 +95,13 @@ Content-Type: application/json
 POST http://localhost:3000/login
 Content-Type: application/json
 
-{"username": "Tyler", "password":"b654321"}
+{"username": "Jorge", "password":"123"}
 ###
-POST http://localhost:3000/admin/tyler-home
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlR5bGVyIiwidXNlcklkIjoiNjI0YjM4MWI2MmFkNDUzZWUzM2RlMzZmIiwiaWF0IjoxNjQ5MDk2NzM0LCJleHAiOjE2NDkxMDAzMzR9.7-QiOvtyk8VHhI1RptefL65cA8aeCHoLiUFEN5MitKU
+POST http://localhost:3000/admin/jorge-site
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpvcmdlIiwidXNlcklkIjoiNjI0YjY3M2QyMDk2MmY2ZjU1YTQxOTY1IiwiaWF0IjoxNjQ5MTA5NTI2LCJleHAiOjE2NDkxMTMxMjZ9.9k5stIzSoAm3TJkOlO8ZUzphpsyVCk3mSeDCHFzSEII
 Content-Type: application/json
 
-{ "name":"Tyler's Landing Page"}
+{ "name":"Jorge Landing Page"}
 
 ###
 GET http://localhost:3000/admin/tyler-home
