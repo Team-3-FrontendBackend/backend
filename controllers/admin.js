@@ -215,7 +215,7 @@ exports.updateSubPage = (req, res, next) => {
   const url = '/'.concat(siteName);
 
   // find the home page
-  User.findOne({ url: url })
+  User.findOne({ _id: req.userId, url: url })
     .then((user) => {
       return Page.findOne({ url: pageName, userId: user._id });
     })
