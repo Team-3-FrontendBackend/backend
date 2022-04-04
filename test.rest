@@ -84,3 +84,29 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpvZ
 Content-Type: application/json
 
 {"name": "Testing"}
+
+###
+POST http://localhost:3000/signup
+Content-Type: application/json 
+
+{"username": "Tyler", "password":"b654321", "confirmPassword":"b654321", "url":"/tyler-home", "siteName":"Tyler's Home"}
+
+###
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{"username": "Tyler", "password":"b654321"}
+###
+POST http://localhost:3000/admin/tyler-home
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlR5bGVyIiwidXNlcklkIjoiNjI0YjM4MWI2MmFkNDUzZWUzM2RlMzZmIiwiaWF0IjoxNjQ5MDk2NzM0LCJleHAiOjE2NDkxMDAzMzR9.7-QiOvtyk8VHhI1RptefL65cA8aeCHoLiUFEN5MitKU
+Content-Type: application/json
+
+{ "name":"Tyler's Landing Page"}
+
+###
+GET http://localhost:3000/admin/tyler-home
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlR5bGVyIiwidXNlcklkIjoiNjI0YjM4MWI2MmFkNDUzZWUzM2RlMzZmIiwiaWF0IjoxNjQ5MDk2NzM0LCJleHAiOjE2NDkxMDAzMzR9.7-QiOvtyk8VHhI1RptefL65cA8aeCHoLiUFEN5MitKU
+
+###
+GET http://localhost:3000/admin
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlR5bGVyIiwidXNlcklkIjoiNjI0YjM4MWI2MmFkNDUzZWUzM2RlMzZmIiwiaWF0IjoxNjQ5MDk2NzM0LCJleHAiOjE2NDkxMDAzMzR9.7-QiOvtyk8VHhI1RptefL65cA8aeCHoLiUFEN5MitKU

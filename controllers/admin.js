@@ -124,7 +124,7 @@ exports.createHome = (req, res, next) => {
   let userUrl;
 
   // get the user object so we can check if a home page already exists.
-  User.findOne({ userId: req.userId })
+  User.findOne({ _id: req.userId })
     .then((user) => {
       if (!user) {
         const error = new Error('No user found');
@@ -184,6 +184,7 @@ exports.createHome = (req, res, next) => {
 
 exports.getHome = (req, res, next) => {
   // get necessary data
+  console.log(req.userId);
   const url = req.params.siteName;
 
   Page.findOne({ url: url, userId: req.userId })
